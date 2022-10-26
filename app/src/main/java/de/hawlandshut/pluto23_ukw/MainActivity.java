@@ -1,9 +1,16 @@
 package de.hawlandshut.pluto23_ukw;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate called.");
+        Toast.makeText(getApplicationContext(), "You pressed Test.", Toast.LENGTH_LONG).show();
     }
 
     // Lifecycle-Funktion: onStart
@@ -22,7 +30,34 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Intent intent = new Intent(getApplication(), ManageAccountActivity.class);
+        startActivity(intent);
         Log.d(TAG, "onStart called.");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch( item.getItemId()){
+            case R.id.menu_post:
+                Toast.makeText(getApplicationContext(), "You pressed Post.", Toast.LENGTH_LONG).show();
+                return true;
+
+            case R.id.menu_manage_account:
+                Toast.makeText(getApplicationContext(), "You pressed Manage Account.", Toast.LENGTH_LONG).show();
+                return true;
+
+            case R.id.menu_test:
+                Toast.makeText(getApplicationContext(), "You pressed Test.", Toast.LENGTH_LONG).show();
+                return true;
+        }
+        return true;
     }
 
     @Override
