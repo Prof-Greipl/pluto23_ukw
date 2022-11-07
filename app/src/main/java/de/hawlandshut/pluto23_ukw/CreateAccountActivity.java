@@ -10,9 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import de.hawlandshut.pluto23_ukw.R;
-
-
 public class CreateAccountActivity extends AppCompatActivity implements View.OnClickListener{
 
     static final String TAG = "xx CreateAccountAct.";

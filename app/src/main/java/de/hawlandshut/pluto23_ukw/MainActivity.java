@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(getApplication(), CreateAccountActivity.class);
+        Intent intent = new Intent(getApplication(), PostActivity.class);
         startActivity(intent);
         Log.d(TAG, "onStart called.");
     }
