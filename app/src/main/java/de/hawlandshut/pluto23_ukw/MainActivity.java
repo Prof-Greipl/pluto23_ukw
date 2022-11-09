@@ -3,6 +3,8 @@ package de.hawlandshut.pluto23_ukw;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,16 +15,35 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import de.hawlandshut.pluto23_ukw.test.Testdata;
+
 public class MainActivity extends AppCompatActivity {
 
     private final static String TAG = "xx MainActivitity";
+    CustomAdapter mAdapter;
+    RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate called.");
-        Toast.makeText(getApplicationContext(), "You pressed Test.", Toast.LENGTH_LONG).show();
+
+        // Recyclerview setzen.
+        mAdapter = new CustomAdapter();
+        // Setze Liste mit den Testposts
+        mAdapter.mPostList = Testdata.createPostList();
+
+
+        mRecyclerView = (RecyclerView) findViewById( R.id.recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager( this ));
+        Log.d(TAG, "3");
+        mRecyclerView.setAdapter( mAdapter );
+
+
     }
 
     // Lifecycle-Funktion: onStart
@@ -30,8 +51,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Intent intent = new Intent(getApplication(), PostActivity.class);
-        startActivity(intent);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null){
+            Log.d(TAG,"Nutzer angemeldet : " + user.getEmail());
+        }
+        else {
+            Log.d(TAG, "Es ist kein user angemeldet");
+        }
+
+     //   Intent intent = new Intent(getApplication(), CreateAccountActivity.class);
+     //   startActivity(intent);
         Log.d(TAG, "onStart called.");
     }
 
