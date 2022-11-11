@@ -59,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Es ist kein user angemeldet");
         }
 
-     //   Intent intent = new Intent(getApplication(), CreateAccountActivity.class);
-     //   startActivity(intent);
+        Intent intent = new Intent(getApplication(), PostActivity.class);
+        startActivity(intent);
         Log.d(TAG, "onStart called.");
     }
 
