@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_testAuthStatus"
+        android:title="Test Auth Status" />
+
+    <item
+        android:id="@+id/menu_createTestuser"
+        android:title="Create Testuser" />
+
+    <item
+        android:id="@+id/menu_signInTestuser"
+        android:title="Sign in Testuser" />
+
+    <item
+        android:id="@+id/menu_signOutTestuser"
+        android:title="Sign Out Testuser" />
+
+    <item
+        android:id="@+id/menu_deleteTestuser"
+        android:title="Delete Testuser" />
+
+    <item
+        android:id="@+id/menu_sendResetPasswordMail"
+        android:title="Send reset password mail." />
+
+    <item
+        android:id="@+id/menu_sendActivationMail"
+        android:title="Send activation mail." />
+
 
     <item
         android:id="@+id/menu_post"
@@ -11,8 +39,4 @@
         android:title="Manage Account"
         />
 
-    <item
-        android:id="@+id/menu_test"
-        android:title="Test"
-        />
 </menu>
