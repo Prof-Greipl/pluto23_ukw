@@ -28,6 +28,7 @@ import de.hawlandshut.pluto23_ukw.test.Testdata;
 public class MainActivity extends AppCompatActivity {
 
     private final static String TAG = "xx MainActivitity";
+
     CustomAdapter mAdapter;
     RecyclerView mRecyclerView;
     ProgressBar mProgressBar;
@@ -60,8 +61,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        //Intent intent = new Intent(getApplication(), PostActivity.class);
-        //startActivity(intent);
+        // If there is no current user, jump to sign in...
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null) {
+            Intent intent = new Intent(getApplication(), SignInActivity.class);
+            startActivity(intent);
+        } else {
+
+        }
         Log.d(TAG, "onStart called.");
     }
 
@@ -75,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Intent intent;
         String msg;
         switch( item.getItemId()){
             case R.id.menu_testAuthStatus:
@@ -106,11 +114,13 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.menu_post:
-                Toast.makeText(getApplicationContext(), "You pressed Post.", Toast.LENGTH_LONG).show();
+                intent = new Intent(getApplication(), PostActivity.class);
+                startActivity(intent);
                 return true;
 
             case R.id.menu_manage_account:
-                Toast.makeText(getApplicationContext(), "You pressed Manage Account.", Toast.LENGTH_LONG).show();
+                 intent = new Intent(getApplication(), ManageAccountActivity.class);
+                startActivity(intent);
                 return true;
 
         }
