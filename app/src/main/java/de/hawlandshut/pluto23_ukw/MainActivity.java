@@ -22,7 +22,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import de.hawlandshut.pluto23_ukw.model.Post;
 import de.hawlandshut.pluto23_ukw.test.Testdata;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     CustomAdapter mAdapter;
     RecyclerView mRecyclerView;
     ProgressBar mProgressBar;
+
+    private ListenerRegistration mListenerRegistration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,14 +55,12 @@ public class MainActivity extends AppCompatActivity {
         // Recyclerview setzen.
         mAdapter = new CustomAdapter();
         // Setze Liste mit den Testposts
-        mAdapter.mPostList = Testdata.createPostList();
-
+        //mAdapter.mPostList = Testdata.createPostList();
 
         mRecyclerView = (RecyclerView) findViewById( R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager( this ));
         Log.d(TAG, "3");
         mRecyclerView.setAdapter( mAdapter );
-
     }
 
     // Lifecycle-Funktion: onStart
@@ -67,9 +75,33 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplication(), SignInActivity.class);
             startActivity(intent);
         } else {
-
+            mListenerRegistration = getQueryListener();
         }
         Log.d(TAG, "onStart called.");
+    }
+
+
+    ListenerRegistration getQueryListener() {
+        // Datenabfrage
+        Query query = FirebaseFirestore.getInstance()
+                .collection("posts")
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .limit(10);
+
+        return query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot snapshot, @Nullable FirebaseFirestoreException error) {
+                mAdapter.mPostList.clear(); // Leere Post-List
+                Log.d(TAG, "Snapshot listener");
+                for (QueryDocumentSnapshot doc :snapshot){
+                    Log.d(TAG, "Snapshotlistener reveived : "+ doc.getId());
+                    Post receivedPost =  Post.fromDocument( doc );
+                    //Eintrag in Postliste
+                    mAdapter.mPostList.add( receivedPost );
+                 }
+                mAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -122,6 +154,10 @@ public class MainActivity extends AppCompatActivity {
                  intent = new Intent(getApplication(), ManageAccountActivity.class);
                 startActivity(intent);
                 return true;
+
+            case R.id.menu_create_crash:
+                throw new RuntimeException("Test Crash"); // Force a crash
+
 
         }
         return true;

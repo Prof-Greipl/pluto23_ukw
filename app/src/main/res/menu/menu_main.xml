@@ -28,6 +28,9 @@
         android:id="@+id/menu_sendActivationMail"
         android:title="Send activation mail." />
 
+    <item
+        android:id="@+id/menu_create_crash"
+        android:title="Create Crash" />
 
     <item
         android:id="@+id/menu_post"

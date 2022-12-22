@@ -11,9 +11,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,11 +51,28 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void doPost() {
-        // Create a new user with a first and last name
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user == null){
+            return; // Nur zur Sicherheit - sollte nicht auftreten...
+        }
+
+        String body = mEditTextText.getText().toString();
+        // TODO: Check, if body is empty
+        if (body == null | body.equals("")){
+            String msg = "Your message is empty";
+            Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String title = mEditTextTitle.getText().toString();
+
         Map<String, Object> post = new HashMap<>();
-        post.put("first", "Ada");
-        post.put("last", "Lovelace");
-        post.put("born", 1815);
+        post.put("uid", user.getUid());
+        post.put("email",user.getEmail());
+        post.put("title", title );
+        post.put("body", body );
+        post.put("createdAt", new Date() );
 
         // Add a new document with a generated ID
         FirebaseFirestore.getInstance().collection("posts")
@@ -60,13 +80,13 @@ public class PostActivity extends AppCompatActivity implements View.OnClickListe
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                        Log.d(TAG, "Post added with ID: " + documentReference.getId());
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
+                        Log.w(TAG, "Error adding post", e);
                     }
                 });
     }

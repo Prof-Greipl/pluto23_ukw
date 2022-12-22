@@ -15,7 +15,8 @@ import de.hawlandshut.pluto23_ukw.model.Post;
 
 public class CustomAdapter extends  RecyclerView.Adapter<CustomViewHolder>{
 
-    public ArrayList<Post> mPostList;
+    public ArrayList<Post> mPostList = new ArrayList<Post>();
+
     int c = 1;
     @NonNull
     @Override
@@ -30,9 +31,8 @@ public class CustomAdapter extends  RecyclerView.Adapter<CustomViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
-        Log.d("xx CustomAdapter","called onBindViewHolder pos = "+ holder.getLayoutPosition());
-
         Post post = mPostList.get( position );
+        Log.d("xx onBindViewHolder", "Value : " + post.email);
         holder.mLine1.setText( post.email +", " + post.createdAt );
         holder.mLine2.setText( post.body );
     }
